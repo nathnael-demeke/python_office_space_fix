@@ -1,14 +1,19 @@
 import socket
 import pyautogui as au
+import random
 
 server = socket.socket()
 server.bind(("localhost", 12))
-server.listen(1)
+server.listen(1200)
+au.FAILSAFE = False
+while True:  
+    client,InetAddress = server.accept()
+    numbers = [x for x in range(1200)]
+    x = au.position().x
+    y = au.position().y
+    st = str(x) + " " + str(y)
+    
+    client.send(bytes(st, "utf-8"))
+    client.close()
 
-# while True:
-#     client,InetAddress = server.accept()
-#     client.send(bytes("12", "utf-8"))
 
-
-while True:
-    print(au.position())
