@@ -6,6 +6,7 @@ server = socket.socket()
 server.bind(("localhost", 12))
 server.listen(1200)
 au.FAILSAFE = False
+print(socket.gethostbyname(socket.gethostname()))
 while True:  
     client,InetAddress = server.accept()
     numbers = [x for x in range(1200)]
