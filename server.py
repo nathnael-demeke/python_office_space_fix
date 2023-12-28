@@ -11,7 +11,7 @@ def do_something(socket):
    socket.send(bytes("yes", "utf-8"))
 def send_mouse_clicked():  
   mouse_event_socket = socket.socket()
-  mouse_event_socket.bind(("localhost",10))
+  mouse_event_socket.bind(("localhost",110))
   mouse_event_socket.listen(12) 
   cli, addr = mouse_event_socket.accept() 
   def on_click(x, y, button, pressed):  
@@ -26,7 +26,7 @@ def send_mouse_clicked():
             
             elif send == True:
                   send = False
-                  send = False
+                  
 
            
 
@@ -35,7 +35,7 @@ def send_mouse_clicked():
         listener.join()   
 def send_mouse_location():
    server = socket.socket()
-   server.bind(("localhost", 12))
+   server.bind(("localhost", 112))
    server.listen(1200)
    start_second_server = True
    au.FAILSAFE = False
