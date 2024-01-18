@@ -6,12 +6,12 @@ from pynput.keyboard import Key,Listener
 import threading
 
 
-tab_pressed = False
-
-def do_something(socket, message):
-   socket.send(bytes(message, "utf-8"))
+tab_pressed = True
+send = False
+def do_something(socket):
+   socket.send(bytes("yes", "utf-8"))
+   print("hey")
 def detect_key_pressed():
-
    key_pressed_socket = socket.socket()
    key_pressed_socket.bind(("0.0.0.0", 10))
    key_pressed_socket.listen(13)
@@ -23,31 +23,36 @@ def detect_key_pressed():
          tab_pressed = True if tab_pressed == False else False
          print(tab_pressed)
       else:
-         if tab_pressed:
-            cli.send(bytes("{0}".format(key),"utf-8"))
+         if tab_pressed == True:
+            cli.send(bytes(f"{key}","utf-8"))
+         
          print('{0} pressed'.format(key))
    with Listener(on_press=on_press) as listener:
     listener.join()
 
 def send_mouse_clicked():  
-   send = False
+   
    mouse_event_socket = socket.socket()
    mouse_event_socket.bind(("0.0.0.0",80))
    mouse_event_socket.listen(12) 
-   cli, addr = mouse_event_socket.accept() 
+   cli, addr = mouse_event_socket.accept()
+   print("send_mouse_clicked() has began") 
    def on_click(x, y, button, pressed):  
       global send
       send = send
-      if pressed:
-            if tab_pressed == True:
-               # cli.send(bytes("yes", "utf-8")) 
-               if send == False:
-                  do_something(cli, "yes")
-                  send = True
-               
-               elif send == True:
-               
-                     send = False
+      print("you have clicked")
+      if pressed == True:
+            try:
+               if tab_pressed == True:
+                  print("you hace passed line 48")
+                  # cli.send(bytes("yes", "utf-8")) 
+                  if send == False:
+                     do_something(cli)
+                     send = True    
+                  elif send == True:
+                    send = False
+            except Exception as e :
+              print(e)
    with Listener(on_click=on_click) as listener:
         listener.join()   
 def send_mouse_location():
@@ -59,15 +64,13 @@ def send_mouse_location():
    print(socket.gethostbyname(socket.gethostname()))
 
    while True:  
-    if tab_pressed:
+    if tab_pressed == True:
       client,InetAddress = server.accept()
       x = au.position().x
       y = au.position().y
       st = str(x) + " " + str(y)
       client.send(bytes(st, "utf-8"))
       client.close()
-    
-
 if __name__ == '__main__':
   parralel_mouse_event = mp.Process(target=send_mouse_clicked)
   parralel_mouse_location = mp.Process(target=send_mouse_location)
@@ -75,4 +78,3 @@ if __name__ == '__main__':
   parralel_mouse_event.start()
   parralel_mouse_location.start()
   parralel_key_pressed.start()
-
