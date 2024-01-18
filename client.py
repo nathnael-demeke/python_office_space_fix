@@ -9,7 +9,6 @@ pyautogui.FAILSAFE = False
 
 
 server_address = "localhost"
-
 def recive_mouse_clicked():
    mouse_event_client = socket.socket()
    mouse_event_client.connect((server_address , 80))
