@@ -7,7 +7,6 @@ pyautogui.FAILSAFE = False
 # client.connect(("192.168.1.10", 12))
 
 
-
 server_address = "localhost"
 def recive_key_pressed():
    key_pressed_socket = socket.socket()
@@ -15,7 +14,7 @@ def recive_key_pressed():
    print("key events have started...")
    while True:
       key_event = key_pressed_socket.recv(1024).decode("utf-8")
-      print(key_event)
+      pyautogui.press(key_event)
 def recive_mouse_clicked():
    mouse_event_client = socket.socket()
    mouse_event_client.connect((server_address , 80))
