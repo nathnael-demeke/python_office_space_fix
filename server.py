@@ -5,7 +5,7 @@ from pynput.mouse import Listener
 from pynput.keyboard import Key,Listener
 import threading
 
-send = False
+
 tab_pressed = False
 
 def do_something(socket, message):
@@ -23,12 +23,14 @@ def detect_key_pressed():
          tab_pressed = True if tab_pressed == False else False
          print(tab_pressed)
       else:
-         do_something(cli,key)
+         cli.send(bytes("{0}".format(key),"utf-8"))
+
          print('{0} pressed'.format(key))
    with Listener(on_press=on_press) as listener:
     listener.join()
 
 def send_mouse_clicked():  
+   send = False
    mouse_event_socket = socket.socket()
    mouse_event_socket.bind(("0.0.0.0",80))
    mouse_event_socket.listen(12) 
@@ -44,6 +46,7 @@ def send_mouse_clicked():
                   send = True
                
                elif send == True:
+               
                      send = False
    with Listener(on_click=on_click) as listener:
         listener.join()   

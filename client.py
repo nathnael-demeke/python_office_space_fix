@@ -12,6 +12,7 @@ server_address = "localhost"
 def recive_key_pressed():
    key_pressed_socket = socket.socket()
    key_pressed_socket.connect((server_address, 10))
+   print("key events have started...")
    while True:
       key_event = key_pressed_socket.recv(1024).decode("utf-8")
       print(key_event)
@@ -41,5 +42,7 @@ def recieve_mouse_location():
 if __name__ == '__main__':
    parralel_mouse_location = mp.Process(target=recieve_mouse_location)
    parralel_mouse_event = mp.Process(target=recive_mouse_clicked)
+   parralel_key_pressed = mp.Process(target=recive_key_pressed)
+   parralel_key_pressed.start()
    parralel_mouse_location.start()
    parralel_mouse_event.start()
