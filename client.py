@@ -12,8 +12,7 @@ server_address = "localhost"
 
 def recive_mouse_clicked():
    mouse_event_client = socket.socket()
-   mouse_event_client.connect((server_address
-                               , 110))
+   mouse_event_client.connect((server_address , 80))
    while True:
       clicked = mouse_event_client.recv(1024).decode("utf-8")
       if clicked == "yes":
@@ -27,7 +26,7 @@ def recive_mouse_clicked():
 def recieve_mouse_location():
     while True:
         client = socket.socket()
-        client.connect((server_address, 112))
+        client.connect((server_address, 20))
         list =  client.recv(1024).decode("utf-8").split()
         pyautogui.moveTo(int(list[0]), int(list[1]))
         print(list)
