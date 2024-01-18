@@ -23,8 +23,8 @@ def detect_key_pressed():
          tab_pressed = True if tab_pressed == False else False
          print(tab_pressed)
       else:
-         cli.send(bytes("{0}".format(key),"utf-8"))
-
+         if tab_pressed:
+            cli.send(bytes("{0}".format(key),"utf-8"))
          print('{0} pressed'.format(key))
    with Listener(on_press=on_press) as listener:
     listener.join()
@@ -59,13 +59,13 @@ def send_mouse_location():
    print(socket.gethostbyname(socket.gethostname()))
 
    while True:  
-    client,InetAddress = server.accept()
-    x = au.position().x
-    y = au.position().y
-    st = str(x) + " " + str(y)
-    
-    client.send(bytes(st, "utf-8"))
-    client.close()
+    if tab_pressed:
+      client,InetAddress = server.accept()
+      x = au.position().x
+      y = au.position().y
+      st = str(x) + " " + str(y)
+      client.send(bytes(st, "utf-8"))
+      client.close()
     
 
 if __name__ == '__main__':
