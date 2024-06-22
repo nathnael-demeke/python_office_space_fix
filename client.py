@@ -26,7 +26,6 @@ def recive_key_pressed():
          pyautogui.press("space")
       else:
          pyautogui.press(key_event)
-         print(key_event)
 def recive_mouse_clicked():
    print("Recive mouse event started")
    mouse_event_client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -37,7 +36,6 @@ def recive_mouse_clicked():
       clicked = cli.recv(1024).decode("utf-8")
       if clicked == "yes":
          pyautogui.click()
-         print("recived")
          try:
             cli.close()
          except:
@@ -51,8 +49,6 @@ def recieve_mouse_location():
         client.connect((server_address, 20))
         list =  client.recv(1024).decode("utf-8").split()
         pyautogui.moveTo(int(list[0]), int(list[1]))
-        print(list)
-
         client.close()
 
 if __name__ == '__main__':

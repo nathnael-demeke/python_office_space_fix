@@ -78,8 +78,8 @@ if __name__ == '__main__':
   parralel_mouse_location = mp.Process(target=send_mouse_location)
   parralel_key_pressed = mp.Process(target=detect_key_pressed)
   parralel_mouse_click_listener = mp.Process(target=click_parralel)
-#   parralel_mouse_click_listener.start()
-#   parralel_mouse_location.start()
+  parralel_mouse_click_listener.start()
+  parralel_mouse_location.start()
   parralel_key_pressed.start()
 
 
