@@ -8,7 +8,9 @@ pyautogui.FAILSAFE = False
 
 
 
-server_address = "localhost"
+config_file = open("config.json")
+configurations = json.load(config_file)
+server_address = configurations["ServerAddress"]
 def recive_key_pressed():
    key_pressed_socket = socket.socket()
    key_pressed_socket.connect((server_address, 10))

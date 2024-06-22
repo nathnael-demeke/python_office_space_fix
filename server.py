@@ -7,9 +7,15 @@ from pynput.mouse import Listener as Mouse_Listener
 from pynput.keyboard import Listener as Keyboard_Listener
 from pynput.keyboard import Key
 import asyncio
+import json
 
 tab_pressed = False
 mouse_event_client = None
+
+config_file = open("config.json","r")
+configurations = json.load(config_file)
+client_address = configurations["ClientAddress"]
+
 def do_something(socket, message):
    socket.send(bytes(message, "utf-8"))
 def detect_key_pressed():
@@ -48,7 +54,7 @@ def send_mouse_location():
 
 def send_clicked_event():
       server = socket.socket()  
-      server.connect(("localhost",80))
+      server.connect((client_address,80))
       server.send(bytes("yes","utf-8"))
       server.close()
       
