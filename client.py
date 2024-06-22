@@ -15,6 +15,7 @@ def recive_key_pressed():
    print("key events have started...")
    while True:
       key_event = key_pressed_socket.recv(1024).decode("utf-8")
+      pyautogui.press(key_event)
       print(key_event)
 def recive_mouse_clicked():
    print("Recive mouse event started")
@@ -27,6 +28,10 @@ def recive_mouse_clicked():
       if clicked == "yes":
          pyautogui.click()
          print("recived")
+         try:
+            cli.close()
+         except:
+            print("err")
       else:
             pass
 
@@ -44,7 +49,6 @@ if __name__ == '__main__':
    parralel_mouse_location = mp.Process(target=recieve_mouse_location)
    parralel_mouse_event = mp.Process(target=recive_mouse_clicked)
    parralel_key_pressed = mp.Process(target=recive_key_pressed)
-   # parralel_key_pressed.start()
-   # parralel_mouse_location.start()
-   # parralel_mouse_event.start()
-   recive_mouse_clicked()
+   parralel_key_pressed.start()
+   parralel_mouse_location.start()
+   parralel_mouse_event.start()

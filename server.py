@@ -6,7 +6,7 @@ import time
 from pynput.mouse import Listener as Mouse_Listener
 from pynput.keyboard import Listener as Keyboard_Listener
 from pynput.keyboard import Key
-
+import asyncio
 
 tab_pressed = False
 mouse_event_client = None
@@ -29,12 +29,7 @@ def detect_key_pressed():
          print('{0} pressed'.format(key))
    with Keyboard_Listener(on_press=on_press) as listener:
     listener.join()
-   print("keybooard")
-
-        
-
-            
-   
+   print("keybooard")  
 def send_mouse_location():
    server = socket.socket()
    server.bind(("0.0.0.0", 20))
@@ -50,36 +45,36 @@ def send_mouse_location():
     st = str(x) + " " + str(y)
     
     client.send(bytes(st, "utf-8"))
-    
 
+def send_clicked_event():
+      server = socket.socket()  
+      server.connect(("localhost",80))
+      server.send(bytes("yes","utf-8"))
+      server.close()
+      
 def click_parralel():
-   def on_click(x, y, button, pressed): 
-      send = False
-      if pressed:
-            send = True
-            print("hello world") 
-            if (send == True):
-               try:
-                     server = socket.socket()  
-                     server.connect(("localhost",80))
-                     server.send(bytes("yes","utf-8"))
-                     server.close()
-                     time.sleep(0.1)
-                     print("sent message")
-               except Exception as e:
-                  print(e)
-            send = False
-   with Mouse_Listener(on_click=on_click) as listener:
-      listener.join()
+   def on_click(x, y, button, pressed):
+      #I have noticed that the on_click function will run twice once for the if statmenet and one for else statment
+      #My conclusion is if Pressed will make my code run a continous unwanted loop 
+         if pressed:
+            return False
+         else:
+            try:
+               send_clicked_event()
+            except Exception as click_error:
+               print(click_error)
+   while True:
+      with Mouse_Listener(on_click=on_click) as listener:
+         listener.join()
+       
 
 if __name__ == '__main__':
   parralel_mouse_location = mp.Process(target=send_mouse_location)
   parralel_key_pressed = mp.Process(target=detect_key_pressed)
   parralel_mouse_click_listener = mp.Process(target=click_parralel)
-#   parralel_mouse_click_listener.start()
-  click_parralel()
-#   parralel_mouse_location.start()
-#   parralel_key_pressed.start()
+  parralel_mouse_click_listener.start()
+  parralel_mouse_location.start()
+  parralel_key_pressed.start()
 
 
 
