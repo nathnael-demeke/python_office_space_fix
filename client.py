@@ -18,8 +18,15 @@ def recive_key_pressed():
    print("key events have started...")
    while True:
       key_event = key_pressed_socket.recv(1024).decode("utf-8")
-      pyautogui.press(key_event)
-      print(key_event)
+      if key_event == "Key.enter":
+         pyautogui.press("enter")
+      elif key_event == "Key.backspace":
+         pyautogui.press("backspace")
+      elif key_event == "Key.space":
+         pyautogui.press("space")
+      else:
+         pyautogui.press(key_event)
+         print(key_event)
 def recive_mouse_clicked():
    print("Recive mouse event started")
    mouse_event_client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

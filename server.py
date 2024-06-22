@@ -30,9 +30,9 @@ def detect_key_pressed():
          tab_pressed = True if tab_pressed == False else False
          print(tab_pressed)
       else:
-         cli.send(bytes("{0}".format(key),"utf-8"))
-
-         print('{0} pressed'.format(key))
+         key_event = str(key).replace("'", "")
+         cli.send(bytes(key_event,"utf-8"))
+         print(key)
    with Keyboard_Listener(on_press=on_press) as listener:
     listener.join()
    print("keybooard")  
@@ -78,8 +78,8 @@ if __name__ == '__main__':
   parralel_mouse_location = mp.Process(target=send_mouse_location)
   parralel_key_pressed = mp.Process(target=detect_key_pressed)
   parralel_mouse_click_listener = mp.Process(target=click_parralel)
-  parralel_mouse_click_listener.start()
-  parralel_mouse_location.start()
+#   parralel_mouse_click_listener.start()
+#   parralel_mouse_location.start()
   parralel_key_pressed.start()
 
 
