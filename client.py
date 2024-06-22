@@ -1,5 +1,6 @@
 import socket
 import pyautogui
+import json
 import multiprocessing as mp
 
 pyautogui.FAILSAFE = False
@@ -22,7 +23,7 @@ def recive_key_pressed():
 def recive_mouse_clicked():
    print("Recive mouse event started")
    mouse_event_client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-   mouse_event_client.bind((server_address , 80))
+   mouse_event_client.bind((server_address , 100))
    mouse_event_client.listen(10)
    while True:
       cli,addr = mouse_event_client.accept()

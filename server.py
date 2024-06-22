@@ -54,7 +54,7 @@ def send_mouse_location():
 
 def send_clicked_event():
       server = socket.socket()  
-      server.connect((client_address,80))
+      server.connect((client_address,100))
       server.send(bytes("yes","utf-8"))
       server.close()
       
