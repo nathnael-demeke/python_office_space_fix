@@ -31,6 +31,7 @@ finally:
             pyautogui.press("space")
          else:
             pyautogui.press(key_event)
+            print(key_event)
    def recive_mouse_clicked():
       print("Recive mouse event started")
       mouse_event_client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
