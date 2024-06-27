@@ -11,14 +11,11 @@ import json
 
 tab_pressed = False
 mouse_event_client = None
-
+client_address = None
 try:
    config_file = open("settings.json","r")
-   conigurations = json.load(config_file)
+   configurations = json.load(config_file)
    client_address = configurations["ClientAddress"]
-except:
-   print("Please configure your settings at config.json")
-finally:
    def do_something(socket, message):
       socket.send(bytes(message, "utf-8"))
    def detect_key_pressed():
@@ -85,6 +82,6 @@ finally:
       parralel_mouse_click_listener.start()
       parralel_mouse_location.start()
       parralel_key_pressed.start()
-
-
-
+except Exception as e:
+   print("Please configure your settings at settings.json")
+   print(e)
