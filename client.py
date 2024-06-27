@@ -13,8 +13,9 @@ try:
    config_file = open("settings.json")
    configurations = json.load(config_file)
    server_address = configurations["ServerAddress"]
-except:
+except Exception as e:
    print("Please Configure your adresses in 'settings.json'")
+   print(e)
 finally:
    def recive_key_pressed():
       key_pressed_socket = socket.socket()
@@ -30,6 +31,7 @@ finally:
             pyautogui.press("space")
          else:
             pyautogui.press(key_event)
+            print(key_event)
    def recive_mouse_clicked():
       print("Recive mouse event started")
       mouse_event_client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

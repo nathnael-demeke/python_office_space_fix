@@ -11,16 +11,11 @@ import json
 
 tab_pressed = False
 mouse_event_client = None
-
+client_address = None
 try:
    config_file = open("settings.json","r")
-   conigurations = json.load(config_file)
+   configurations = json.load(config_file)
    client_address = configurations["ClientAddress"]
-except:
-   print("Please configure your settings at config.json")
-finally:
-   def do_something(socket, message):
-      socket.send(bytes(message, "utf-8"))
    def detect_key_pressed():
       key_pressed_socket = socket.socket()
       key_pressed_socket.bind(("0.0.0.0", 10))
@@ -30,15 +25,15 @@ finally:
          global tab_pressed
          tab_pressed = tab_pressed 
          if key == Key.tab:
-            tab_pressed = True if tab_pressed == False else False
-            print(tab_pressed)
+               tab_pressed = not tab_pressed
          else:
             key_event = str(key).replace("'", "")
-            cli.send(bytes(key_event,"utf-8"))
-            print(key)
+            if tab_pressed:
+               cli.send(bytes(key_event,"utf-8"))
       with Keyboard_Listener(on_press=on_press) as listener:
          listener.join()
          print("keybooard")  
+
    def send_mouse_location():
       server = socket.socket()
       server.bind(("0.0.0.0", 20))
@@ -53,13 +48,15 @@ finally:
          y = au.position().y
          st = str(x) + " " + str(y)
          
-         client.send(bytes(st, "utf-8"))
+         if tab_pressed:
+          client.send(bytes(st, "utf-8"))
 
    def send_clicked_event():
-         server = socket.socket()  
-         server.connect((client_address,100))
-         server.send(bytes("yes","utf-8"))
-         server.close()
+        if tab_pressed:
+            server = socket.socket()  
+            server.connect((client_address,100))
+            server.send(bytes("yes","utf-8"))
+            server.close()
          
    def click_parralel():
       def on_click(x, y, button, pressed):
@@ -85,6 +82,6 @@ finally:
       parralel_mouse_click_listener.start()
       parralel_mouse_location.start()
       parralel_key_pressed.start()
-
-
-
+except Exception as e:
+   print("Please configure your settings at settings.json")
+   print(e)
