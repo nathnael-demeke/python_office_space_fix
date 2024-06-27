@@ -9,7 +9,6 @@ from pynput.keyboard import Key
 import asyncio
 import json
 
-tab_pressed = False
 mouse_event_client = None
 client_address = None
 try:
@@ -22,14 +21,8 @@ try:
       key_pressed_socket.listen(13)
       cli, addr = key_pressed_socket.accept()
       def on_press(key):
-         global tab_pressed
-         tab_pressed = tab_pressed 
-         if key == Key.tab:
-               tab_pressed = not tab_pressed
-         else:
-            key_event = str(key).replace("'", "")
-            if tab_pressed:
-               cli.send(bytes(key_event,"utf-8"))
+         key_event = str(key).replace("'", "")
+         cli.send(bytes(key_event,"utf-8"))
       with Keyboard_Listener(on_press=on_press) as listener:
          listener.join()
          print("keybooard")  
@@ -47,18 +40,22 @@ try:
          x = au.position().x
          y = au.position().y
          st = str(x) + " " + str(y)
+         client.send(bytes(st, "utf-8"))  
          
-         if tab_pressed:
-          client.send(bytes(st, "utf-8"))
 
-   def send_clicked_event():
-        if tab_pressed:
-            server = socket.socket()  
-            server.connect((client_address,100))
-            server.send(bytes("yes","utf-8"))
-            server.close()
-         
+   def send_mouse_event(message):
+      server = socket.socket()  
+      server.connect((client_address,100))
+      server.send(bytes(message,"utf-8"))
+      server.close()
+   
+
    def click_parralel():
+      def on_scroll(x,y,dx,dy):
+         if dy > 0:
+            print("scroll up")
+         else:
+            print("scroll down")
       def on_click(x, y, button, pressed):
          #I have noticed that the on_click function will run twice once for the if statmenet and one for else statment
          #My conclusion is if Pressed will make my code run a continous unwanted loop 
@@ -66,11 +63,11 @@ try:
                return False
             else:
                try:
-                  send_clicked_event()
+                  send_mouse_event("clicked")
                except Exception as click_error:
                   print(click_error)
       while True:
-         with Mouse_Listener(on_click=on_click) as listener:
+         with Mouse_Listener(on_click=on_click,on_scroll=on_scroll) as listener:
             listener.join()
 
 
@@ -82,6 +79,6 @@ try:
       parralel_mouse_click_listener.start()
       parralel_mouse_location.start()
       parralel_key_pressed.start()
-except Exception as e:
+except Exception as e:  
    print("Please configure your settings at settings.json")
    print(e)

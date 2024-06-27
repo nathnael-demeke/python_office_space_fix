@@ -1,4 +1,4 @@
 {
     "ServerAddress": "localhost",
-    "ClientAddress": "localhost"
-}
+    "ClientAddress": "192.168.8.123"
+}   

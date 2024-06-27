@@ -39,23 +39,28 @@ finally:
       mouse_event_client.listen(10)
       while True:
          cli,addr = mouse_event_client.accept()
-         clicked = cli.recv(1024).decode("utf-8")
-         if clicked == "yes":
+         event = cli.recv(1024).decode("utf-8")
+         if event == "clicked":
             pyautogui.click()
             try:
                cli.close()
             except:
                print("err")
-         else:
+         elif event == "scrollDown":
                pass
 
    def recieve_mouse_location():
+      print("started")
       while True:
-         client = socket.socket()
-         client.connect((server_address, 20))
-         list =  client.recv(1024).decode("utf-8").split()
-         pyautogui.moveTo(int(list[0]), int(list[1]))
-         client.close()
+         try:
+            client = socket.socket()
+            client.connect((server_address, 20))
+            list =  client.recv(1024).decode("utf-8").split()
+            if list != []:
+               pyautogui.moveTo(int(list[0]), int(list[1]))
+               print(list)   
+         except Exception as mouse_location_error:
+            print(mouse_location_error)
 
    if __name__ == '__main__':
       parralel_mouse_location = mp.Process(target=recieve_mouse_location)
