@@ -47,7 +47,10 @@ finally:
             except:
                print("err")
          elif event == "scrollDown":
+               pyautogui.scroll(3)
                pass
+         elif event == "scrollUp":
+            pass
 
    def recieve_mouse_location():
       print("started")

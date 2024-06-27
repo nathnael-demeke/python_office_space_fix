@@ -1,7 +1,7 @@
-from pynput.mouse import Listener
-def on_click(x, y, button, pressed):  
-      if pressed:
-            print("hello world")
+import pyautogui
+import time 
 
-with Listener(on_click=on_click) as listener:
-               listener.join()   
+
+while True:
+      pyautogui.scroll(-4)
+      time.sleep(0.1)

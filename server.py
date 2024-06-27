@@ -53,9 +53,9 @@ try:
    def click_parralel():
       def on_scroll(x,y,dx,dy):
          if dy > 0:
-            print("scroll up")
+            send_mouse_event("scrollUp")
          else:
-            print("scroll down")
+            send_mouse_event("scrollDown")
       def on_click(x, y, button, pressed):
          #I have noticed that the on_click function will run twice once for the if statmenet and one for else statment
          #My conclusion is if Pressed will make my code run a continous unwanted loop 
@@ -69,9 +69,6 @@ try:
       while True:
          with Mouse_Listener(on_click=on_click,on_scroll=on_scroll) as listener:
             listener.join()
-
-
-
    if __name__ == '__main__':
       parralel_mouse_location = mp.Process(target=send_mouse_location)
       parralel_key_pressed = mp.Process(target=detect_key_pressed)
