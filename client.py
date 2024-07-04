@@ -8,6 +8,8 @@ pyautogui.FAILSAFE = False
 # client.connect(("192.168.1.10", 12))
 
 
+clientWindowWidth = pyautogui.size().width
+clientWindowHeight = pyautogui.size().height
 
 try: 
    config_file = open("settings.json")
@@ -37,6 +39,7 @@ finally:
       mouse_event_client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
       mouse_event_client.bind(("0.0.0.0" , 100))
       mouse_event_client.listen(10)
+      
       while True:
          cli,addr = mouse_event_client.accept()
          event = cli.recv(1024).decode("utf-8")
@@ -54,13 +57,22 @@ finally:
 
    def recieve_mouse_location():
       print("started")
+      client = socket.socket()
+      client.connect((server_address, 20))
+      init_message = client.recv(1024).decode('utf-8')
+      init_message = json.loads(init_message)
+      serverWindowWidth = init_message["WindowWidth"]
+      serverWindowHeight = init_message["WindowHeight"]
+      #The factor variables are the one that we will use to make some adjustments on different screen sized computers
+      width_factor = serverWindowWidth / clientWindowWidth
+      height_factor = serverWindowHeight / clientWindowHeight
+      print(f"windows width {serverWindowWidth} height {serverWindowHeight}")
+
       while True:
-         try:
-            client = socket.socket()
-            client.connect((server_address, 20))
+         try:     
             list =  client.recv(1024).decode("utf-8").split()
             if list != []:
-               pyautogui.moveTo(int(list[0]), int(list[1]))
+               pyautogui.moveTo(int(list[0]) * width_factor, int(list[1]) * height_factor)
                print(list)   
          except Exception as mouse_location_error:
             print(mouse_location_error)

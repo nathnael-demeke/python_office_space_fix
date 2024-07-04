@@ -11,6 +11,9 @@ import json
 
 mouse_event_client = None
 client_address = None
+windowWidth = au.size().width
+windowHeight = au.size().height
+
 try:
    config_file = open("settings.json","r")
    configurations = json.load(config_file)
@@ -34,6 +37,9 @@ try:
       start_second_server = True
       au.FAILSAFE = False
       print(socket.gethostbyname(socket.gethostname()))
+
+      init_message = {"WindowWidth": windowWidth, "WindowHeight": windowHeight}
+      server.send(json.dumps(init_message))
 
       while True:  
          client,InetAddress = server.accept()
